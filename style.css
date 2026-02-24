@@ -253,9 +253,15 @@ button .fas {
   display: none;
 }
 
-.success-message {
+#congrats {
   background-color: #e8f4fc;
   color: #003c71;
+
+  border-radius: 8px;
+  padding: 8px 0px;
+  margin: 15px 0px;
+
+  display: none;
 }
 
 /* Counter */
