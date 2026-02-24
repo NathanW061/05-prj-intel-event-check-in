@@ -248,13 +248,14 @@ button .fas {
   font-size: 18px;
   padding: 16px 20px;
   border-radius: 8px;
+  background-color: #e8f4fc;
   color: #333;
   margin-bottom: 15px;
   display: none;
 }
 
 #congrats {
-  background-color: #e8f4fc;
+  background-color: #f5e8fc;
   color: #003c71;
 
   border-radius: 8px;

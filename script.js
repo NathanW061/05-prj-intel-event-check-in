@@ -153,11 +153,11 @@ function updatePage(updatedTeam)
     // Display the message depending on if one or two teams won
     if(winners.length === 1)
     {
-      disp_winner.textContent = `All attendees checked in! The winning team is ${getTeamName(winners[0])}.`;
+      disp_winner.textContent = `🎊 All attendees checked in! The winning team is ${getTeamName(winners[0])}.`;
     }
     else
     {
-      disp_winner.textContent = `All attendees checked in! The winning teams are ${getTeamName(winners[0])} and ${getTeamName(winners[1])}.`;
+      disp_winner.textContent = `🎊 All attendees checked in! The winning teams are ${getTeamName(winners[0])} and ${getTeamName(winners[1])}.`;
     }
   }
   else
@@ -167,7 +167,7 @@ function updatePage(updatedTeam)
 // Display personalized greeting for signed-in attendee
 function displayGreeting(name, teamName)
 {
-  disp_greeting.textContent = `Welcome, ${name} from ${teamName}!`;
+  disp_greeting.textContent = `👋 Welcome, ${name} from ${teamName}!`;
   disp_greeting.style.display = "block";
 }
 
