@@ -112,7 +112,7 @@ function updatePage(updatedTeam)
 
     // Update the HTML page to reflect updated total attendee count
     disp_attendeeCount.textContent = checkInData.getTotalCount();
-    disp_progressBar.textContent = checkInData.getTotalCount() / maxAttendees;
+    disp_progressBar.style.width = (checkInData.getTotalCount() / maxAttendees * 100) + "%";
 }
 
 // Display personalized greeting for signed-in attendee
