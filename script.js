@@ -23,16 +23,28 @@ const checkInData = {
     var total = 0;
 
     for(let team of teams) {
-      total += this[team];
+      total += this[team].length;
     }
 
     return total;
   },
 
+  // Get the list of attendees for a specific team
+  getTeamAttendees: function(team) {
+    return this[team];
+  },
+
+  // Calculate the number of attendees for a specific team
+  getTeamCount: function(team)
+  {
+    return this[team].length;
+  },
+
   // Reset all check-in data and remove it from local storage (used for testing via JavaScript console)
   reset: function() {
     for(let team of teams) {
-      this[team] = 0;
+      //this[team] = 0;
+      this[team] = [];
       localStorage.removeItem(team);
     }
   },
@@ -41,27 +53,60 @@ const checkInData = {
   load: function() {
     for(let team of teams)
     {
-      checkInData[team] = parseInt(localStorage.getItem(team) ?? 0);
+      this[team] = [];
+
+      let teamListJson = localStorage.getItem(team);
+      if(teamListJson !== null)
+        this[team] = JSON.parse(teamListJson);
     }
   },
 
-  // Increment the attendee count for a specific team
-  incrementTeamCount: function (team) {
-    this[team] ++;
-    localStorage.setItem(team, this[team]);
-  },
+  // Adds an attendee to a specific team
+  addToTeam: function(team, name) {
+    this[team].push(name);
+    localStorage.setItem(team, JSON.stringify(this[team]));
+  }
 };
+
+// Update team-specific page elements
+function updatePageTeam(updatedTeam)
+{
+  // Update the displayed count
+  document.getElementById(updatedTeam + "Count").textContent = checkInData.getTeamCount(updatedTeam);
+
+  // Iterate through attendee list elements and append new attendee items if needed
+  let attendeeList = document.getElementById(updatedTeam + "Names");
+  let expectedAttendees = checkInData.getTeamAttendees(updatedTeam);
+  for(var i = 0; i < expectedAttendees.length; i ++)
+  {
+    let expectedName = expectedAttendees[i];
+    if(i >= attendeeList.children.length)
+    {
+      // Append the name to the team's list
+      var listItem = document.createElement("li");
+      listItem.textContent = expectedName;
+      attendeeList.appendChild(listItem);
+    }
+    else
+    {
+      // Update attendee name if it doesn't match
+      let currentNameNode = attendeeList.children[i];
+      if(currentNameNode.textContent !== expectedName)
+        currentNameNode.textContent = expectedName;
+    }
+  }
+}
 
 // Update the page to reflect the current check-in data
 function updatePage(updatedTeam)
 {
     // Update the HTML page to reflect new team count for specified team, or all teams if no team was specified
     if(updatedTeam !== undefined) {
-      document.getElementById(updatedTeam + "Count").textContent = checkInData[updatedTeam];
+      updatePageTeam(updatedTeam);
     }
     else {
       for(let team of teams) {
-        document.getElementById(team + "Count").textContent = checkInData[team];
+        updatePageTeam(team);
       }
     }
 
@@ -77,6 +122,18 @@ function displayGreeting(name, teamName)
   disp_greeting.style.display = "block";
 }
 
+// Adds an entered name to a team's list of attendees
+function addNameToTeam(name, team)
+{
+  // Add the name to the check-in data
+  checkInData.addToTeam(team, name);
+
+  // Append the name to the team's list
+  var listItem = document.createElement("li");
+  listItem.textContent = name;
+  document.getElementById(team + "Names").appendChild(listItem);
+}
+
 // Add event listener for form submission
 form.addEventListener("submit", function (event) {
   // Override default form submission behavior
@@ -88,9 +145,9 @@ form.addEventListener("submit", function (event) {
   const teamName = form_teamSelect.selectedOptions[0].text;
 
   // Update check-in stats
-  checkInData.incrementTeamCount(team);
-  updatePage(team);
+  addNameToTeam(name, team);
   displayGreeting(name, teamName);
+  updatePage(team);
 
   console.log(`Attendee '${name}' signed in for team '${teamName}'.`);
 });

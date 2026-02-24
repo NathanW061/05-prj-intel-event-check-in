@@ -348,6 +348,12 @@ select {
   color: #475569;
 }
 
+.team-attendees {
+  font-size: 14px;
+  color: #7b8ea8;
+  list-style: none;
+}
+
 /* Mobile responsive */
 @media (max-width: 768px) {
   .hero {
